@@ -1,1 +1,5 @@
-external libraries go here
+External libraries go here.
+
+The 'get_configs.sh' script downloads and installs idiorm, paris and smarty 
+at predictable versions, for ease of use.  It requires curl.  On successfully
+downloading the relevant versions, it will overwrite any existing version.
