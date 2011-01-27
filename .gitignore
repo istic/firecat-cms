@@ -1,1 +1,4 @@
 cache/*
+contrib/idiorm/*
+contrib/paris/*
+contrib/smarty/*
