@@ -42,9 +42,6 @@ define('L_WARN', 4);
 define('L_ERROR', 2);
 define('L_FATAL', 1);
 
-
-
-
 // Three, set up the basic objects
 
 $request  = new HTTP_Request();

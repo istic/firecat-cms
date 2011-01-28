@@ -10,7 +10,7 @@ class Routing {
 	function __construct(HTTP_Request $request){
 	
 		$path = $request->path;
-				
+                
 		switch (count($path)){
 			case 0:
 				Logger::log('Routing', 'Routing to front page', L_INFO);

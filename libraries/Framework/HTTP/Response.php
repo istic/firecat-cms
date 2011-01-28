@@ -5,7 +5,7 @@ class HTTP_Response {
 	private $content = '<hr><i>No content provided to response</i>';
 	private $content_type = 'text/xml';
 	private $status_code  = '200';
-	private $status_message = 'All arite, Captain';
+	private $status_message = 'OK';
 	
 	private $cookies= array();
 	
