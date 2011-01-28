@@ -3,3 +3,4 @@ contrib/idiorm/*
 contrib/paris/*
 contrib/smarty/*
 nbproject
+configLocal.ini
