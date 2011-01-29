@@ -4,6 +4,9 @@
  *
  * @author Aquarion
  */
+
+require_once 'smarty/libs/Smarty.class.php';
+
 class SmartyView extends Smarty {
    function __construct()
    {

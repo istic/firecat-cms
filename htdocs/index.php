@@ -7,7 +7,6 @@ $path = ini_get("include_path");
 $path = "../libraries:../libraries/Framework:../contrib:".$path;
 ini_set("include_path", $path);
 
-require_once 'smarty/libs/Smarty.class.php';
 
 define("PATH", getcwd());
 
