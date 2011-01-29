@@ -18,6 +18,9 @@ class Session {
 
 
     function get($index){
+        if(!isset($_SESSION[$index])){
+            return null;
+        }
         return $_SESSION[$index];
     }
 
