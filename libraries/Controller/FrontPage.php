@@ -1,12 +1,9 @@
 <?php
 
 class Controller_FrontPage extends Controller {
-
-
-    function IndedxAction(){
+    function IndexAction(){
         $this->response->setcontent("Hello World");
     }
-
 }
 
 ?>
