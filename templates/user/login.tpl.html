@@ -2,16 +2,13 @@
 {block name=body}
 
 <form action="{$nextpage}" method="POST">
-    Register a new account:<br/>
-    <input type="text"     name="username"  placeholder="Username" value="{$user->username}"/><br/>
-    <input type="email"    name="email"     placeholder="email"    value="{$user->email}"/><br/>
+    <input type="text"     name="username"  placeholder="Username" value="{$username}"/><br/>
     <input type="password" name="password"  placeholder="Password"/><br/>
-    <input type="password" name="password2" placeholder="Repeat your password"/><br/>
     <input type="hidden"   name="formid"    value="{$formid}"/>
     <input type="submit"/>
 </form>
 
-{if $errors}
+{if isset($errors)}
     <ul class="errors">
     {foreach $errors as $error}
     <li>{$error}</li>
