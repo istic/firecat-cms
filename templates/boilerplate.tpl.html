@@ -2,6 +2,24 @@
 <html>
 <head>
 <title>{$title}</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+
+<style type="text/css">
+body {
+       font-family: Constantia;
+       font-size: 16pt;
+       padding: 0;
+       margin: 0;
+}
+
+#header {
+    background: black;
+    color: white;
+    line-height: 72pt;
+}
+    
+</style>
+
 </head>
 <body class="{$bodyStyle|default:"firecat"}">
 
@@ -10,7 +28,9 @@
 </div>
 
 <!-- Displays main content block -->
+<div id="content">
 {block name=body}{/block}
+</div>
 
 </body>
 </html>
