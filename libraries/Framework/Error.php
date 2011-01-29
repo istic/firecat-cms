@@ -77,7 +77,10 @@ class Error {
 				define("CODE_PATH", getcwd());
 			}
 			//$file = str_replace(getcwd(), 'CWD', $t['file']);
-			$file = $t['file'];
+                        $file = "";
+                        if(isset($t['file'])){
+                            $file = $t['file'];
+                        }
 			$file = str_replace(realpath(CODE_PATH), '[<acronym title="'.realpath(CODE_PATH).'">APP</acronym>]', $file);
 			$file = str_replace(realpath(PATH), '[<acronym title="'.realpath(PATH).'">PLK</acronym>]', $file);
 			$file = str_replace(getcwd(), 'CWD', $file);
@@ -97,7 +100,7 @@ class Error {
 			} else {
 				$args = "[no arguments]";
 			}
-			$output .= sprintf($sprintf, $function, $file, $t['line'], $id, $id, $args);
+			$output .= sprintf($sprintf, $function, $file, $line, $id, $id, $args);
 			
 		}
 		
