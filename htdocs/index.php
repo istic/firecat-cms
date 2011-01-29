@@ -4,8 +4,10 @@
 // Step one, set up some basic stuff.
 
 $path = ini_get("include_path");
-$path .= ":../libraries:../libraries/Framework";
+$path .= ":../libraries:../libraries/Framework:../contrib";
 ini_set("include_path", $path);
+
+require_once '../contrib/smarty/libs/Smarty.class.php';
 
 define("PATH", getcwd());
 
@@ -14,11 +16,15 @@ define("PATH", getcwd());
 // it'll automatically look for a file called Libaries/Firecat/WitW/Character.php to include
 // if it has no idea what class you mean.
 
+
 require("Autoload.php");
 require("Logger.php");
-function __autoload($class_name){
+
+function PlankAutoload($class_name){
 	Autoload::loadClass($class_name);
 }
+spl_autoload_register("PlankAutoload", true);
+
 function handle_exceptions($e){
 	global $response;
 	Error::Error503($e, $response);
@@ -26,6 +32,7 @@ function handle_exceptions($e){
 set_exception_handler("handle_exceptions");
 
 
+// Last lot of settings
 
 header('Content-type: text/html; charset=UTF-8') ;
 ob_start();
