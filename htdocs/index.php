@@ -49,6 +49,23 @@ define('L_WARN', 4);
 define('L_ERROR', 2);
 define('L_FATAL', 1);
 
+
+// And some database stuff
+
+$config = Config::getInstance();
+
+require_once 'idiorm/idiorm.php';
+require_once 'paris/paris.php';
+
+$dbdata = $config->getArea("database");
+
+$dsn = $dbdata['datasource'];
+unset($dbdata['datasource']);
+
+ORM::configure($dsn);
+foreach($dbdata as $key => $value){
+    ORM::configure($key, $value);
+}
 // Three, set up the basic objects
 
 $request  = new HTTP_Request();
