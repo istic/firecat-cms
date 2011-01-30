@@ -17,6 +17,21 @@ body {
     color: white;
     line-height: 72pt;
 }
+
+
+body.frontpage {
+    background: #000;
+    color: white;
+}
+
+img {
+    border: 0;
+}
+
+img.fade{
+    opacity:0.4;
+    filter:alpha(opacity=40)
+}
     
 </style>
 
@@ -24,7 +39,7 @@ body {
 <body class="{$bodyStyle|default:"firecat"}">
 
 <div id="header">
-    <h1>Firecat ~ {$title}</h1>
+    <h1>{$title|default:""}</h1>
 </div>
 
 <!-- Displays main content block -->

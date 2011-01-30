@@ -1,4 +1,5 @@
 RewriteEngine On
 RewriteBase /
+RewriteRule static - [L]
 RewriteRule index.php - [L]
 RewriteRule (.*) index.php
