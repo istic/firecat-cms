@@ -18,6 +18,16 @@ class Model_User extends Model {
     //public $is_npc;
     //public $password_reset_key;
 
-    
+    public function owned(){
+        return $this->has_many('Model_Ticket', "owner_user_id");
+    }
+
+    public function reported(){
+        return $this->has_many('Model_Ticket', "reporter_user_id");
+    }
+
+    public function awaitinginput(){
+        return $this->has_many('Model_Ticket', "awaiting_input_user_id");
+    }
 }
 ?>

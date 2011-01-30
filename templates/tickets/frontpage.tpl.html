@@ -1,0 +1,27 @@
+{extends file="boilerplate.tpl.html"}
+{block name=body}
+
+<p>[<a href="/Tickets/new">Create a new Ticket</a>]</p>
+
+<h2>Tickets assigned to you</h2>
+
+{foreach $mytickets as $ticket}
+    Hio
+{/foreach}
+
+<h2>Tickets assigned to groups you're in</h2>
+<p><i>Feel free to pick these up (assign them to you) if you're the best person to do them</i></p>
+{foreach $ticketgroups as $group}
+    <h3>{$group.name}</h2>
+    {foreach $group.grouptickets as $ticket}
+        Hio
+    {/foreach}
+{/foreach}
+
+<h2>Tickets waiting for your input</h2>
+
+{foreach $myinput as $ticket}
+    Hio
+{/foreach}
+
+{/block}
