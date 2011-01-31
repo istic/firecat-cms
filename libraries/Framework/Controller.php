@@ -33,7 +33,7 @@ class Controller {
             if ($user->is_admin){
                 return true;
             } else {
-                throw Exception("Access Denied");
+                throw new Exception("Access Denied, User is not an administrator");
             }
         } else {
             return false;
