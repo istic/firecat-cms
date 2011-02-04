@@ -72,7 +72,7 @@ $request  = new HTTP_Request();
 $response = new HTTP_Response();
 
 // Four, run the site.
-new Site($request, &$response);
+new Site($request, $response);
 
 $response->respond();
 
