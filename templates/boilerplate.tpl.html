@@ -53,7 +53,7 @@ img.fade{
 
 <div id="loginbar" style="">
 {if $loggedin}
-    Hello {$user->username}
+    Hello <a href="/User/">{$user->username}</a>
  {else}
     [ <a href="/User/login">Login</a> ]
 {/if}

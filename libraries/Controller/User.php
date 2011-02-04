@@ -197,8 +197,19 @@ class Controller_User extends Controller {
     }
 
     function IndexAction(){
-        
-        $this->response->setcontent("Hello World");
+        $this->requireLogin();
+
+        $session = Session::getInstance();
+        $user = $session->get("user");
+
+        $smarty = new SmartyView();
+        $smarty->assign('title', 'User Details');
+        $smarty->assign('user', $user);
+
+        $out = $smarty->fetch('user/viewCurrent.tpl.html');
+        $this->response->setcontent($out);
+
+
     }
 
 
