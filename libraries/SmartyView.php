@@ -10,6 +10,13 @@ require_once 'smarty/libs/Smarty.class.php';
 class SmartyView extends Smarty {
    function __construct()
    {
+        $session = Session::getInstance();
+        
+        $this->assign('loggedin', $session->get("loggedin"));
+
+        if ( $session->get("loggedin")){
+            $this->assign('user', $session->get("user"));
+        }
 
         // Class Constructor.
         // These automatically get set with each new instance.
@@ -22,6 +29,7 @@ class SmartyView extends Smarty {
         $this->cache_dir    = PATH."/../cache/smarty_cache";
 
         //$this->caching = Smarty::CACHING_LIFETIME_CURRENT;
+        $this->assign('app_name', 'Firecat');
         $this->assign('app_name', 'Firecat');
    }
 }

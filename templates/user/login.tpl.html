@@ -6,7 +6,10 @@
     <input type="password" name="password"  placeholder="Password"/><br/>
     <input type="hidden"   name="formid"    value="{$formid}"/>
     <input type="submit"/>
-</form>
+
+   </form>
+
+[ <a href="/User/register">I probably need an account for this, don't I?</a> |  <a href="/User/forgotpassword">Ah... er... what's my password again?</a> ]
 
 {if isset($errors)}
     <ul class="errors">

@@ -1,0 +1,19 @@
+{extends file="boilerplate.tpl.html"}
+{block name=body}
+
+<h2>{$ticket->name}</h2>
+
+Created {{$ticket->date_created}|date_format} <br/>
+Modified  {{$ticket->date_modified}|date_format} <br/>
+Date Due {{$ticket->date_due}|date_format} <br/>
+
+<p>{$ticket->percentage_done}% Completed</p>
+
+Owner {$owner->username}<br/>
+
+Reporter {$reporter->username}
+
+<p>{nl2br($ticket->description)}</p>
+
+
+{/block}

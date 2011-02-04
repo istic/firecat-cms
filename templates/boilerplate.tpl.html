@@ -7,7 +7,7 @@
 <style type="text/css">
 body {
        font-family: Constantia;
-       font-size: 16pt;
+       font-size: 12pt;
        padding: 0;
        margin: 0;
 }
@@ -16,6 +16,11 @@ body {
     background: black;
     color: white;
     line-height: 72pt;
+}
+
+#header h1 {
+    padding: 0;
+    margin: 0;
 }
 
 
@@ -32,11 +37,27 @@ img.fade{
     opacity:0.4;
     filter:alpha(opacity=40)
 }
+
+#loginbar {
+    background: #225; color: white;
+}
+#loginbar a {
+    color: white;
+    font-weight: bold;
+}
     
 </style>
 
 </head>
 <body class="{$bodyStyle|default:"firecat"}">
+
+<div id="loginbar" style="">
+{if $loggedin}
+    Hello {$user->username}
+ {else}
+    [ <a href="/User/login">Login</a> ]
+{/if}
+</div>
 
 <div id="header">
     <h1>{$title|default:""}</h1>

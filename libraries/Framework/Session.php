@@ -31,4 +31,23 @@ class Session {
     function destroy(){
         session_destroy();
     }
+
+    // A flash is a one-time message to be displayed on the next page you see.
+    function flash($message){
+        if(!isset($_SESSION['flashes'])){
+            $_SESSION['flashes'] = array();
+        }
+
+        $_SESSION['flashes'][] = $message;
+    }
+
+    function getFlashes(){
+        if(!isset($_SESSION['flashes'])){
+            return array();
+        }
+        $flashes = $_SESSION['flashes'];
+        $_SESSION['flashes'] = array();
+        return $flashes;
+
+    }
 }

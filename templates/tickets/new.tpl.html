@@ -1,5 +1,6 @@
 {extends file="boilerplate.tpl.html"}
 {block name=body}
+<form method="POST" action="/Tickets/create">
 
 <h2><input type="text" placeholder="Ticket Name" name="name" value="{$name}" style="font-size: 24pt;"/></h2>
 
@@ -10,13 +11,22 @@ Date Due <input type="text" placeholder="YYYY-MM-DD" name="date_due" value="{$da
 <p>0% Completed</p>
 
 Owner <select name="owner">
-    {html_options values=$ownerids output=$ownervalues selected=$ticket->owner_user_id}
+    {html_options values=$ownerids output=$ownervalues selected=$ownerid}
     </select><br/>
 
 Reporter {$reporter}
 
-<p><textarea placeholder="Ticket Description" cols="72" rows="7">{$description}</textarea><br/>
+<p><textarea placeholder="Ticket Description" name="description" cols="72" rows="7">{$description}</textarea><br/>
 
     <input type="submit"/>
+</form>
+
+{if isset($errors)}
+    <ul class="errors">
+    {foreach $errors as $error}
+    <li>{$error}</li>
+    {/foreach}
+    </ul>
+{/if}
 
 {/block}

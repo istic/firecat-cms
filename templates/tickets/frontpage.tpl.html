@@ -5,9 +5,11 @@
 
 <h2>Tickets assigned to you</h2>
 
+<ul>
 {foreach $mytickets as $ticket}
-    Hio
+<li><a href="/Tickets/view/{$ticket->getid()}">{$ticket->name}</a></li>
 {/foreach}
+</ul>
 
 <h2>Tickets assigned to groups you're in</h2>
 <p><i>Feel free to pick these up (assign them to you) if you're the best person to do them</i></p>

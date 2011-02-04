@@ -56,6 +56,11 @@ class Controller_User extends Controller {
             $password = sha1($password.$config->get("crypto", "salt"));
             $user->password = $password;
             $user->save();
+
+            $session->flash("User account created. Please log in.");
+            $this->response->redirect("/User/login");
+
+
         } else {
 
             $formid = uniqid();
@@ -175,6 +180,16 @@ class Controller_User extends Controller {
     function IndexAction(){
         
         $this->response->setcontent("Hello World");
+    }
+
+
+    function forgotpasswordAction(){
+
+        $smarty = new SmartyView();
+        $smarty->assign('title', 'Forgot Password');
+
+        $out = $smarty->fetch('user/forgotpassword.tpl.html');
+        $this->response->setcontent($out);
     }
 }
 ?>
