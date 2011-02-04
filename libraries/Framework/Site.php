@@ -21,7 +21,7 @@
 class Site {
 	
 
-	function __construct($request, $response){
+	function __construct($request, &$response){
 		
 		$config = Config::getInstance();
         	$init = new Site_Initialise($request, $response);
