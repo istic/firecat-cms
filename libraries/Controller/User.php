@@ -133,17 +133,36 @@ class Controller_User extends Controller {
         
          if(count($errors) == 0){
             $password = $this->request->post->password;
-            $password = sha1($password.$config->get("crypto", "salt"));
+            $hashed = sha1($password.$config->get("crypto", "salt"));
 
-            $users = Model::Factory('Model_User')
+            $user = Model::Factory('Model_User')
                 ->where("username", $this->request->post->username)
-                ->where("password", $password)
+                ->where("password", $hashed)
                 ->find_one();
 
-            if($users != 0){
+            // Code to support login with old-style MD5 passwords,
+            // Ideally we want to remove this at some point.
+            if ($user == 0){
+                $user = Model::Factory('Model_User')
+                ->where("username", $this->request->post->username)
+                ->where("password", md5($password))
+                ->find_one();
+
+                if($users != 0){
+                    $user->force_change_password = 1;
+                    $user->save();
+                    $session->set("loggedin", true);
+                    $session->set("user", $user);
+                    $this->response->redirect("/User/changePassword");
+                }
+
+            }
+            // </old style passwords>
+
+            if($user != 0){
 
                 $session->set("loggedin", true);
-                $session->set("user", $users);
+                $session->set("user", $user);
                
                 if($to = $session->get("afterLogin")){
                     $this->response->redirect($to);
