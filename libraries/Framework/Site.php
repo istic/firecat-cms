@@ -64,9 +64,12 @@ class Site {
 		$init->gotcontroller($controller, $routing->action);
 		
 		$method = $routing->action.'Action';
-		
-		$controller->$method();
-		
+
+                try {
+                    $controller->$method();
+                } catch (Exception_Redirect $exception){
+                    Logger::log('Router', 'Caught a redirect', L_WARN);
+                }
 		
 		$init->shutdown($routing->controller, $routing->action);
 		

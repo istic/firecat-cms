@@ -47,6 +47,7 @@ class HTTP_Response {
 		$this->location = $location;
 		$this->setstatus(301);
 		$this->setcontent("301 to ".$location);
+                throw new Exception_Redirect();
 	}
 	
 	public function setstatus($code){
