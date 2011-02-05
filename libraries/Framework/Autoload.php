@@ -6,9 +6,6 @@ class Autoload {
 		if (defined('INIT')){
 			Logger::log('Autoloader', 'Loading class '.$class_name, L_TRACE);
 		}
-
-		error_log('Loading '.$class_name);
-
 		$found = Autoload::findClass($class_name);
 
 		if ($found){
