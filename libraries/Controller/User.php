@@ -208,5 +208,15 @@ class Controller_User extends Controller {
         $out = $smarty->fetch('user/forgotpassword.tpl.html');
         $this->response->setcontent($out);
     }
+
+    function changePasswordAction(){
+        $this->requireLogin();
+
+        $smarty = new SmartyView();
+        $smarty->assign('title', 'Forgot Password');
+
+        $out = $smarty->fetch('user/changePassword.tpl.html');
+        $this->response->setcontent($out);
+    }
 }
 ?>
