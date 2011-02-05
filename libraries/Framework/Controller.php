@@ -23,6 +23,13 @@ class Controller {
             $this->response->redirect("/User/login");
             return false;
         }
+
+        $user = $session->get("user");
+        if($user->force_change_password == 1 && "/User/changePassword" != $this->request->uri){
+            $session->set("afterPasswordChange", $this->request->uri);
+            $this->response->redirect("/User/changePassword");
+            return false;
+        }
         return true;
     }
 
