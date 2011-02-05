@@ -117,6 +117,13 @@ class Controller_User extends Controller {
         $this->response->setcontent($out);
     }
 
+    function logoutAction(){
+        $session = Session::getInstance();
+        $session->destroy();
+        $this->response->redirect("/");
+        return;
+    }
+
     function authAction(){
         $session = Session::getInstance();
         $config = Config::getInstance();
