@@ -11,6 +11,8 @@ class SmartyView extends Smarty {
    function __construct()
    {
         $session = Session::getInstance();
+
+        $this->assign("session", $session);
         
         $this->assign('loggedin', $session->get("loggedin"));
 

@@ -48,6 +48,17 @@ class Session {
         $flashes = $_SESSION['flashes'];
         $_SESSION['flashes'] = array();
         return $flashes;
+    }
 
+    function checkForFlashes(){
+        if(!isset($_SESSION['flashes'])){
+            return false;
+        }
+        $count = count($_SESSION['flashes']);
+        if($count > 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 }

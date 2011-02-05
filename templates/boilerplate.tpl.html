@@ -63,6 +63,14 @@ img.fade{
     <h1>{$title|default:""}</h1>
 </div>
 
+{if $session->checkForFlashes()}
+    <ul class="flash">
+    {foreach $session->getFlashes() as $flash}
+    <li>{$flash}</li>
+    {/foreach}
+    </ul>
+{/if}
+
 <!-- Displays main content block -->
 <div id="content">
 {block name=body}{/block}
