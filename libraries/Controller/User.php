@@ -53,8 +53,7 @@ class Controller_User extends Controller {
 
         if(count($errors) == 0){
             $password = $this->request->post->password;
-            $password = sha1($password.$config->get("crypto", "salt"));
-            $user->password = $password;
+            $user->setPassword($password);
             $user->save();
 
             $session->flash("User account created. Please log in.");
@@ -161,7 +160,6 @@ class Controller_User extends Controller {
 
             } else {
                 $errors[] = "Username & Password didn't work, try again";
-                $errors[] = $password;
             }
             
 
@@ -211,9 +209,44 @@ class Controller_User extends Controller {
 
     function changePasswordAction(){
         $this->requireLogin();
-
-        $smarty = new SmartyView();
+        
+	$session = Session::getInstance();
+        $user = $session->get("user");
+        
+	$smarty = new SmartyView();
         $smarty->assign('title', 'Forgot Password');
+	$errors = array();
+	if (isset($this->request->post->oldpassword)){
+		if (empty($this->request->post->oldpassword)){
+			$errors[] = "Old Password is required";
+		}
+		if (empty($this->request->post->newpassword)){
+			$errors[] = "New Password is required";
+		}
+		if ($this->request->post->newpassword != $this->request->post->newpassword_repeat){
+			$errors[] = "New Passwords don't match";
+		}
+
+		if (count($errors) == 0){
+			$result = Model_User::check_password($user->username, $this->request->post->oldpassword);
+			if ($result['status'] == 1){
+				$errors[] = "Your old password did not validate";
+			} else {
+				$user->setPassword($this->request->post->newpassword);
+				$user->force_change_password = 0;
+				$user->save();
+				$session->flash("Your new password has been saved");
+		 		$this->response->redirect("/");
+			}
+	
+		}
+		
+	}
+
+	if (count($errors) > 0){
+		$smarty->assign("errors", $errors);
+	}
+
 
         $out = $smarty->fetch('user/changePassword.tpl.html');
         $this->response->setcontent($out);

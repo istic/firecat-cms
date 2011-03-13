@@ -30,9 +30,8 @@ class Model_User extends Model {
         return $this->has_many('Model_Ticket', "awaiting_input_user_id");
     }
 
+    static public function check_password($username, $password){
 
-    static public function authenticate($username, $password){
-        $session = Session::getInstance();
         $config = Config::getInstance();
         
         $hashed = sha1($password.$config->get("crypto", "salt"));
@@ -41,6 +40,8 @@ class Model_User extends Model {
             ->where("username", $username)
             ->where("password", $hashed)
             ->find_one();
+
+	$result = 1;
 
         // Code to support login with old-style MD5 passwords,
         // Ideally we want to remove this at some point.
@@ -51,14 +52,40 @@ class Model_User extends Model {
             ->find_one();
 
             if($user){
+		$result = -1;
+            }
+        } else {
+		$result = 0;
+	}
+
+        return array('status' => $result, 'user' => $user);
+
+
+    }
+
+    static public function authenticate($username, $password){
+	$result = Model_User::check_password($username, $password);
+        
+	$session = Session::getInstance();
+
+
+	if ($result['status'] === 0){
+		return $result['user'];
+	} elseif($result['status'] === 1){
+		return false;
+	} elseif($result['status'] === -1){
                 $session->flash("Sorry, due to a security upgrade you need to reset your password");
+		$user = $result['user'];
                 $user->force_change_password = 1;
                 $user->save();
-            }
-        }
+		return $result['user'];
+	}
+    }
 
-        return $user;
-
+    public function setPassword($password){
+	$config = Config::getInstance();
+        $password = sha1($password.$config->get("crypto", "salt"));
+        $this->password = $password;
     }
 }
 ?>
