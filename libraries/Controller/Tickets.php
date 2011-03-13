@@ -42,7 +42,7 @@ class Controller_Tickets extends Controller {
         $ownerids[] = false;
         $ownervalues[] = "-- Users --";
 
-        $users = Model::factory('Model_User')->find_many();
+        $users = Model::factory('Model_User')->where("is_admin", 1)->find_many();
         foreach($users as $user){
             $ownerids[] = "user_".$user->id;
             $ownervalues[] = $user->username;
