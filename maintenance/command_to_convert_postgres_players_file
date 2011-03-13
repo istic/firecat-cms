@@ -1,0 +1,9 @@
+ cat assets/players.sql | sed -e"s/, true/, 1/g" | sed -e"s/, false/, 0/g" > assets/players.mysql
+
+(This turns "true/false" into "1/0" as mysql doesn't have a boolean data type
+
+Then, strip everything that isn't an INSERT statement from the players SQL file, and import it into the players table the schema for which is in Maintainance/sql/mysql.
+
+Finally, from within mysql, and with an empty users table, do:
+
+mysql> insert into user (id, username, password, email, is_admin) select player_id, player_username, player_password, email_address, is_admin from players;  
