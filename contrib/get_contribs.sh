@@ -6,8 +6,8 @@
 # NOTE: Requires curl! (not in default installation)
 
 # Config:
-IDIORM_VERSION=1.1.0
-PARIS_VERSION=1.1.0
+IDIORM_VERSION=1.1.1
+PARIS_VERSION=1.1.1
 SMARTY_VERSION=3.0.6
 
 # Script:
