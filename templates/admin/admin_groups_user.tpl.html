@@ -1,0 +1,21 @@
+{extends file="boilerplate.tpl.html"}
+{block name=body}
+
+<h1>Memberships for {$thisuser->username}</h1>
+
+<h2>Current Memberships</h2>
+<ul>
+{foreach $mygroups as $group}
+    <li>{$group->groupname} <a href="/Admin/AdminGroups?user={$thisuser->username}&leave={$group->id}">Leave</a></li>
+{/foreach}
+</ul>
+
+
+<h2>Other Groups</h2>
+<ul>
+{foreach $othergroups as $group}
+    <li>{$group->groupname} <a href="/Admin/AdminGroups?user={$thisuser->username}&join={$group->id}">Join</a></li>
+{/foreach}
+</ul>
+
+{/block}

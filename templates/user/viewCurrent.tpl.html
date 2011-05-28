@@ -1,7 +1,17 @@
 {extends file="boilerplate.tpl.html"}
 {block name=body}
 
-{$user->username}
-{$user->email}
+<h1>Hello {$user->username}</h1>
+
+<h2>Stuff we know about you</h2>
+
+<dl>
+    <dt>Your Email</dt>
+    <dd>{$user->email}</dd>
+</dl>
+
+(That's it for now, we need to add profile data still)
+
+<p>You could also <a href="/User/changePassword">change your password</a></p>
 
 {/block}

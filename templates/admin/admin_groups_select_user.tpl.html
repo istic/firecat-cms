@@ -1,0 +1,12 @@
+{extends file="boilerplate.tpl.html"}
+{block name=body}
+
+<h1>Admin Actions</h1>
+
+<ul>
+{foreach $users as $user}
+    <li><a href="/Admin/AdminGroups?user={$user->username}">{$user->username}</a></li>
+{/foreach}
+</ul>
+
+{/block}

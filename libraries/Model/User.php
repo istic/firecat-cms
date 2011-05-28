@@ -18,16 +18,20 @@ class Model_User extends Model {
     //public $is_npc;
     //public $password_reset_key;
 
-    public function owned(){
+    public function tickets_owned(){
         return $this->has_many('Model_Ticket', "owner_user_id");
     }
 
-    public function reported(){
+    public function tickets_reported(){
         return $this->has_many('Model_Ticket', "reporter_user_id");
     }
 
-    public function awaitinginput(){
+    public function tickets_awaitinginput(){
         return $this->has_many('Model_Ticket', "awaiting_input_user_id");
+    }
+
+    public function admingroups(){
+         return $this->has_many_through('Model_Admingroup', "Model_UserAdminGroupJoin", "user_id", "admingroup_id");
     }
 
     static public function check_password($username, $password){
@@ -87,5 +91,9 @@ class Model_User extends Model {
         $password = sha1($password.$config->get("crypto", "salt"));
         $this->password = $password;
     }
+}
+
+class Model_UserAdminGroupJoin extends Model {
+    public static $_table = 'user_admingroup';
 }
 ?>
