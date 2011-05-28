@@ -20,16 +20,39 @@ class Controller_Tickets extends Controller {
         $session = Session::getInstance();
         $user = $session->get("user");
 
-        $mytickets = $user->owned()->find_many();
-        $myinput   = $user->awaitinginput()->find_many();
+        $mytickets      = $user->tickets_owned()->find_many();
+        $myinput        = $user->tickets_awaitinginput()->find_many();
+	$ticketgroups   = array();
 
+	foreach($user->admingroups()->find_many() as $group){
+
+	    $tickets = $group->tickets_groupowned()->find_many();
+
+	    $ticketgroups[] = array(
+		"group"   => $group,
+		"tickets" => $tickets
+	    );
+	}
 
         $smarty = new SmartyView();
         $smarty->assign('title', 'My Tickets');
         $smarty->assign('mytickets', $mytickets);
+        $smarty->assign('grouptickets', $ticketgroups);
         $smarty->assign('myinput',   $myinput);
         $out = $smarty->fetch('tickets/frontpage.tpl.html');
         $this->response->setcontent($out);
+    }
+
+    function allAction(){
+
+	$tickets =  Model::factory('Model_Ticket')->find_many();
+
+        $smarty = new SmartyView();
+        $smarty->assign('title', 'All Tickets');
+        $smarty->assign('tickets', $tickets);
+        $out = $smarty->fetch('tickets/ticketlist.tpl.html');
+        $this->response->setcontent($out);
+
     }
 
 
@@ -57,6 +80,8 @@ class Controller_Tickets extends Controller {
         }
         return array($ownerids, $ownervalues);
     }
+
+
 
     function newAction(){
         if(!$this->requireAdmin()){
@@ -94,13 +119,14 @@ class Controller_Tickets extends Controller {
 
         $ticket = Model::factory('Model_Ticket')->create();
         
-        $format = "Y-M-d H:i";
+        $format = "Y-m-d H:i";
 
         $now = date($format);
         
         $ticket->date_created = $now;
 
         $ticket->date_due = date($format, strtotime($POST->date_due));
+
         if($ticket->date_due == 0){
             $errors['date_due'] = "Unrecognised format";
         }
@@ -109,8 +135,10 @@ class Controller_Tickets extends Controller {
 
         if ($type == "group"){
             $ticket->owner_group_id = $id;
+            $ticket->owner_user_id = 0;
         } elseif($type == "user"){
             $ticket->owner_user_id = $id;
+            $ticket->owner_group_id = 0;
         } else {
             $errors['owner'] = "Unknown owning entity";
         }
@@ -159,6 +187,86 @@ class Controller_Tickets extends Controller {
         return;
     }
 
+
+    function editAction(){
+        $format = "Y-m-d H:i";
+
+	
+        $ticket = Model::Factory('Model_Ticket')
+                ->where("id", $this->request->path[2])
+                ->find_one();
+
+	$errors = array();
+
+	$POST = $this->request->post;
+	if (isset($POST->name)){
+
+	    $ticket->date_due = date($format, strtotime($POST->date_due));
+
+	    if($ticket->date_due == 0){
+		$errors['date_due'] = "Unrecognised format";
+	    }
+
+	    list($type, $id) = explode("_", $POST->owner, 2);
+
+
+	    if ($type == "group"){
+		$ticket->owner_group_id = $id;
+		$ticket->owner_user_id = 0;
+	    } elseif($type == "user"){
+		$ticket->owner_user_id = $id;
+		$ticket->owner_group_id = 0;
+	    } else {
+		$errors['owner'] = "Unknown owning entity";
+	    }
+
+
+	    $ticket->name = $POST->name;
+	    if(empty($ticket->name)){
+		$errors['name'] = "Need to name things";
+	    }
+
+	    $ticket->description = $POST->description;
+	    if(empty($ticket->description)){
+		$errors['description'] = "Need to describe things";
+	    }
+
+	    $ticket->status = Model_Ticket::S_OPEN;
+
+	    if(count($errors) == 0){
+		$ticket->save();
+		$this->response->redirect("/Tickets/view/". $ticket->getid());
+		return;
+	    }
+
+	}
+
+	$owner = $ticket->getOwner();
+
+        $smarty = new SmartyView();
+        $smarty->assign('title', 'Ticket');
+        $smarty->assign('ticket', $ticket);
+        $smarty->assign('owner', $owner);
+        $smarty->assign('reporter', $ticket->getReporter());
+
+	if ($owner->has_user){
+	    $smarty->assign('ownerid', "user_".$ticket->owner_user_id);
+	} else {
+	    $smarty->assign('ownerid', "group_".$ticket->owner_group_id);
+	}
+
+        list($ownerids, $ownervalues) = $this->getOwnerDropdown();
+        $smarty->assign('ownerids',    $ownerids);
+        $smarty->assign('ownervalues', $ownervalues);
+
+        $smarty->assign('errors', $errors);
+	
+        $out = $smarty->fetch('tickets/edit.tpl.html');
+        $this->response->setcontent($out);
+
+    }
+
+
     function viewAction(){
 
         $ticket = Model::Factory('Model_Ticket')
@@ -174,6 +282,71 @@ class Controller_Tickets extends Controller {
 
         $out = $smarty->fetch('tickets/view.tpl.html');
         $this->response->setcontent($out);
+
+    }
+
+    function pickupAction(){
+	
+        $ticket = Model::Factory('Model_Ticket')
+                ->where("id", $this->request->path[2])
+                ->find_one();
+
+        $session = Session::getInstance();
+        $user = $session->get("user");
+
+	$ticket->owner_group_id = 0;
+	$ticket->owner_user_id = $user->id;
+	$ticket->save();
+
+	$this->response->redirect("/Tickets/view/".$ticket->id);
+
+    }
+
+    function markAction(){
+        $ticket = Model::Factory('Model_Ticket')
+                ->where("id", $this->request->path[2])
+                ->find_one();
+
+        $session = Session::getInstance();
+        $user = $session->get("user");
+
+	$newstatus = $this->request->path[3];
+
+	echo "Hi";
+
+	if(null === array_search ($newstatus, $ticket->listStatuses()) ) {
+	    $session->flash("Status $newstatus Unknown");
+
+	} else {
+	    $ticket->status = $newstatus;
+	    $ticket->save();
+	    $session->flash("Ticket marked as ".$ticket->humanStatus($newstatus));
+	}
+	$this->response->redirect("/Tickets/view/".$ticket->id);
+
+    }
+    
+    function percentAction(){
+        $ticket = Model::Factory('Model_Ticket')
+                ->where("id", $this->request->path[2])
+                ->find_one();
+
+        $session = Session::getInstance();
+        $user = $session->get("user");
+
+	$percentage_done = $this->request->path[3];
+
+
+	if($percentage_done > 100 || $percentage_done < 0 ) {
+	    $session->flash("What?");
+
+	} else {
+	    $ticket->status = Model_Ticket::S_OPEN;
+	    $ticket->percentage_done = $percentage_done;
+	    $ticket->save();
+	    $session->flash("Ticket marked as ".$percentage_done."% complete");
+	}
+	$this->response->redirect("/Tickets/view/".$ticket->id);
 
     }
 

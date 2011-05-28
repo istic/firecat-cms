@@ -1,22 +1,21 @@
 {extends file="tickets/section.tpl.html"}
 {block name=sectionbody}
-<form method="POST" action="/Tickets/create">
 
-<h2><input type="text" placeholder="Ticket Name" name="name" value="{$name}" style="font-size: 24pt;"/></h2>
+<form method="POST" action="/Tickets/edit/{$ticket->id}">
+
+<h2><input type="text" placeholder="Ticket Name" name="name" value="{$ticket->name}" style="font-size: 24pt;"/></h2>
 
 Created {time()|date_format} <br/>
 Modified  {time()|date_format} <br/>
-Date Due <input type="text" placeholder="YYYY-MM-DD" name="date_due" value="{$date_due}"/><br/>
-
-<p>0% Completed</p>
+Date Due <input type="text" placeholder="YYYY-MM-DD" name="date_due" value="{$ticket->date_due}"/><br/>
 
 Owner <select name="owner">
     {html_options values=$ownerids output=$ownervalues selected=$ownerid}
     </select><br/>
 
-Reporter {$reporter}
+Reporter {$reporter->username}
 
-<p><textarea placeholder="Ticket Description" name="description" cols="72" rows="7">{$description}</textarea><br/>
+<p><textarea placeholder="Ticket Description" name="description" cols="72" rows="7">{$ticket->description}</textarea><br/>
 
     <input type="submit"/>
 </form>
@@ -28,5 +27,4 @@ Reporter {$reporter}
     {/foreach}
     </ul>
 {/if}
-
 {/block}

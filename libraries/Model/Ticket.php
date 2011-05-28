@@ -55,6 +55,10 @@ class Model_Ticket  extends Model {
             return "Unknown";
     }
 
+    public function myHumanStatus(){
+	return $this->humanStatus($this->status);
+    }
+
     public function listStatuses(){
         return array(
             Model_Ticket::S_DELETED,
@@ -73,12 +77,18 @@ class Model_Ticket  extends Model {
             $owner = Model::Factory('Model_User')
                 ->where("id", $this->owner_user_id)
                 ->find_one();
+	    $owner->name = $owner->username;
+	    $owner->has_user = true;
 
         } else {
             $owner = Model::Factory('Model_Admingroup')
                 ->where("id", $this->owner_group_id)
                 ->find_one();
+	    $owner->name = $owner->groupname;
+	    $owner->has_user = false;
         }
+
+
         
         return $owner;
 
@@ -89,6 +99,10 @@ class Model_Ticket  extends Model {
             return Model::Factory('Model_User')
                 ->where("id", $this->reporter_user_id)
                 ->find_one();
+    }
+
+    function due(){
+	return $this->date_due;
     }
 
     //id int auto_increment,

@@ -1,5 +1,5 @@
-{extends file="boilerplate.tpl.html"}
-{block name=body}
+{extends file="tickets/section.tpl.html"}
+{block name=sectionbody}
 
 <p>[<a href="/Tickets/new">Create a new Ticket</a>]</p>
 
@@ -7,23 +7,39 @@
 
 <ul>
 {foreach $mytickets as $ticket}
-<li><a href="/Tickets/view/{$ticket->getid()}">{$ticket->name}</a></li>
+	 <div class="ticket">
+	    <strong><a href="/Tickets/view/{$ticket->id}">{$ticket->name}</a></strong>
+	    &ndash; {$ticket->getOwner()->name}
+	    &ndash; {$ticket->due()}
+	    &ndash; {$ticket->myHumanStatus()}
+	</div>
 {/foreach}
 </ul>
 
 <h2>Tickets assigned to groups you're in</h2>
 <p><i>Feel free to pick these up (assign them to you) if you're the best person to do them</i></p>
-{foreach $ticketgroups as $group}
-    <h3>{$group.name}</h2>
-    {foreach $group.grouptickets as $ticket}
-        Hio
+{foreach $grouptickets as $struct}
+    <h3>{$struct.group->groupname}</h3>
+    {foreach $struct.tickets as $ticket}
+	 <div class="ticket">
+	    <strong><a href="/Tickets/view/{$ticket->id}">{$ticket->name}</a></strong>
+	    &ndash; {$ticket->getOwner()->name}
+	    &ndash; {$ticket->due()}
+	    &ndash; {$ticket->myHumanStatus()}
+	</div>
     {/foreach}
 {/foreach}
 
 <h2>Tickets waiting for your input</h2>
 
 {foreach $myinput as $ticket}
-    Hio
+    <div class="ticket">
+	<strong><a href="/Tickets/view/{$ticket->id}">{$ticket->name}</a></strong>
+	&ndash; {$ticket->getOwner()->name}
+	&ndash; {$ticket->due()}
+	    &ndash; {$ticket->myHumanStatus()}
+    </div>
+
 {/foreach}
 
 {/block}

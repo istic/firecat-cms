@@ -1,0 +1,16 @@
+{extends file="tickets/section.tpl.html"}
+{block name=sectionbody}
+
+<p>[<a href="/Tickets/new">Create a new Ticket</a>]</p>
+
+{foreach $tickets as $ticket}
+
+<div class="ticket">
+    <strong><a href="/Tickets/view/{$ticket->id}">{$ticket->name}</a></strong>
+    &ndash; {$ticket->getOwner()->name}
+    &ndash; {$ticket->due()}
+</div>
+
+{/foreach}
+
+{/block}

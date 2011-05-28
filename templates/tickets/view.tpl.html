@@ -1,19 +1,56 @@
-{extends file="boilerplate.tpl.html"}
-{block name=body}
+{extends file="tickets/section.tpl.html"}
+{block name=sectionbody}
 
-<h2>{$ticket->name}</h2>
+<h2>{$ticket->name} &mdash; {$ticket->myHumanStatus()}</h2>
 
-Created {{$ticket->date_created}|date_format} <br/>
 Modified  {{$ticket->date_modified}|date_format} <br/>
 Date Due {{$ticket->date_due}|date_format} <br/>
 
 <p>{$ticket->percentage_done}% Completed</p>
 
-Owner {$owner->username}<br/>
+Owned by {$owner->name}
 
-Reporter {$reporter->username}
+{if $owner->has_user eq false}
+[<a href="/Tickets/pickup/{$ticket->id}">Take responsibility for this ticket</a>]
+{/if}<br/>
+
+Reported by {$reporter->username} on {{$ticket->date_created}|date_format}
 
 <p>{nl2br($ticket->description)}</p>
+
+
+{if $ticket->owner_user_id == $user->id}
+
+<hr/>
+
+<h2>Modify Ticket</h2>
+
+Register Progress:
+
+<a href="/Tickets/percent/{$ticket->id}/0">0%</a>
+<a href="/Tickets/percent/{$ticket->id}/5">5%</a>
+<a href="/Tickets/percent/{$ticket->id}/10">10%</a>
+<a href="/Tickets/percent/{$ticket->id}/20">20%</a>
+<a href="/Tickets/percent/{$ticket->id}/25">25%</a>
+<a href="/Tickets/percent/{$ticket->id}/35">35%</a>
+<a href="/Tickets/percent/{$ticket->id}/50">50%</a>
+<a href="/Tickets/percent/{$ticket->id}/50">55%</a>
+<a href="/Tickets/percent/{$ticket->id}/65">65%</a>
+<a href="/Tickets/percent/{$ticket->id}/75">75%</a>
+<a href="/Tickets/percent/{$ticket->id}/65">80%</a>
+<a href="/Tickets/percent/{$ticket->id}/65">90%</a>
+<a href="/Tickets/percent/{$ticket->id}/95">95%</a>
+<a href="/Tickets/percent/{$ticket->id}/98">98%</a>
+<a href="/Tickets/percent/{$ticket->id}/99">99%</a>
+
+
+[<a href="/Tickets/mark/{$ticket->id}/{$smarty.const.Model_Ticket::S_COMPLETED}">Mark as complete</a>]
+
+<p>[<a href="/Tickets/edit/{$ticket->id}/">Edit</a>]</p>
+
+
+
+{/if}
 
 
 {/block}
