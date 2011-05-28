@@ -95,6 +95,7 @@ class Controller_Tickets extends Controller {
         $smarty->assign('title', 'New Ticket');
         $smarty->assign('date_due', '');
         $smarty->assign('name', '');
+        $smarty->assign('ownerid', 'user_'.$user->id);
         $smarty->assign('reporter', $user->username);
         $smarty->assign('description', "");
 
@@ -127,8 +128,10 @@ class Controller_Tickets extends Controller {
 
         $ticket->date_due = date($format, strtotime($POST->date_due));
 
-        if($ticket->date_due == 0){
-            $errors['date_due'] = "Unrecognised format";
+        if(strtotime($POST->date_due) == 0){
+	    $ticket->date_due = $POST->date_due;
+            $errors['date_due'] = "I've no idea what that date is supposed to be, sorry.";
+	    
         }
 
         list($type, $id) = explode("_", $POST->owner, 2);
@@ -203,21 +206,29 @@ class Controller_Tickets extends Controller {
 
 	    $ticket->date_due = date($format, strtotime($POST->date_due));
 
-	    if($ticket->date_due == 0){
-		$errors['date_due'] = "Unrecognised format";
+	    if(0 == strtotime($POST->date_due)){
+		$ticket->date_due = $POST->date_due;
+		$errors['date_due'] = "I've no idea what that date is supposed to be, sorry.";
 	    }
 
-	    list($type, $id) = explode("_", $POST->owner, 2);
 
-
-	    if ($type == "group"){
-		$ticket->owner_group_id = $id;
-		$ticket->owner_user_id = 0;
-	    } elseif($type == "user"){
-		$ticket->owner_user_id = $id;
-		$ticket->owner_group_id = 0;
-	    } else {
+	    if (! $POST->owner){
 		$errors['owner'] = "Unknown owning entity";
+
+	    } else {
+
+		list($type, $id) = explode("_", $POST->owner, 2);
+
+
+		if ($type == "group"){
+		    $ticket->owner_group_id = $id;
+		    $ticket->owner_user_id = 0;
+		} elseif($type == "user"){
+		    $ticket->owner_user_id = $id;
+		    $ticket->owner_group_id = 0;
+		} else {
+		    $errors['owner'] = "Unknown owning entity";
+		}
 	    }
 
 
@@ -311,14 +322,14 @@ class Controller_Tickets extends Controller {
         $user = $session->get("user");
 
 	$newstatus = $this->request->path[3];
-
-	echo "Hi";
-
 	if(null === array_search ($newstatus, $ticket->listStatuses()) ) {
 	    $session->flash("Status $newstatus Unknown");
 
 	} else {
 	    $ticket->status = $newstatus;
+	    if ($newstatus == Model_Ticket::S_COMPLETED){
+		$ticket->percentage_done = 100;
+	    }
 	    $ticket->save();
 	    $session->flash("Ticket marked as ".$ticket->humanStatus($newstatus));
 	}

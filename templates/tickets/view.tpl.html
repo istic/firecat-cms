@@ -25,6 +25,10 @@ Reported by {$reporter->username} on {{$ticket->date_created}|date_format}
 
 <h2>Modify Ticket</h2>
 
+{if $ticket->status == $smarty.const.Model_Ticket::S_COMPLETED}
+[<a href="/Tickets/mark/{$ticket->id}/{$smarty.const.Model_Ticket::S_OPEN}">Reopen TIcket</a>]
+
+{else}
 Register Progress:
 
 <a href="/Tickets/percent/{$ticket->id}/0">0%</a>
@@ -34,11 +38,11 @@ Register Progress:
 <a href="/Tickets/percent/{$ticket->id}/25">25%</a>
 <a href="/Tickets/percent/{$ticket->id}/35">35%</a>
 <a href="/Tickets/percent/{$ticket->id}/50">50%</a>
-<a href="/Tickets/percent/{$ticket->id}/50">55%</a>
+<a href="/Tickets/percent/{$ticket->id}/55">55%</a>
 <a href="/Tickets/percent/{$ticket->id}/65">65%</a>
 <a href="/Tickets/percent/{$ticket->id}/75">75%</a>
-<a href="/Tickets/percent/{$ticket->id}/65">80%</a>
-<a href="/Tickets/percent/{$ticket->id}/65">90%</a>
+<a href="/Tickets/percent/{$ticket->id}/80">80%</a>
+<a href="/Tickets/percent/{$ticket->id}/90">90%</a>
 <a href="/Tickets/percent/{$ticket->id}/95">95%</a>
 <a href="/Tickets/percent/{$ticket->id}/98">98%</a>
 <a href="/Tickets/percent/{$ticket->id}/99">99%</a>
@@ -49,6 +53,8 @@ Register Progress:
 <p>[<a href="/Tickets/edit/{$ticket->id}/">Edit</a>]</p>
 
 
+
+{/if}
 
 {/if}
 
