@@ -25,12 +25,25 @@ function PlankAutoload($class_name){
 }
 spl_autoload_register("PlankAutoload", true);
 
+function handle_errors($errno, $errstr, $errfile, $errline){
+    if (!(error_reporting() & $errno)) {
+        // This error code is not included in error_reporting
+	echo $errstr." at ".$errfile ." ". $errline;
+        return true;
+    }
+    global $response;
+    Error::Error503($errstr, $response);
+    return true;
+}
+
 function handle_exceptions($e){
 	global $response;
 	Error::Error503($e, $response);
+	return true;
 }
 set_exception_handler("handle_exceptions");
 
+$old_error_handler = set_error_handler("handle_errors");
 
 // Last lot of settings
 
@@ -79,3 +92,4 @@ $response->respond();
 // Five, blow everything up.
 
 define('DESTRUCT', true);
+echo Logger_Display::display();

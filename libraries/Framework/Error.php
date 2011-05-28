@@ -9,12 +9,11 @@ class Error {
 	}
 	
 	static function Error503($message, $response){
-		
 		Error::defaultError('503', $message, $response);
 	}
 	
 	
-	function defaultError($status, $message, $response){
+	static function defaultError($status, $message, $response){
 		$trace = debug_backtrace();
 		
 		if(is_object($message) && is_subclass_of($message, 'Exception')){
@@ -25,7 +24,7 @@ class Error {
 		if(defined('DESTRUCT')){
 			die($message);
 		}
-	
+
 
                 $view = new stdClass;
 		
@@ -37,10 +36,12 @@ class Error {
 		';
 		
 		$view->error .= Error::getBacktrace($trace);
-		
+
+		echo $view->error;
 		$response->setContent($view->error);
 		
 		$response->respond();
+
 		
 		if(defined("TEXTMODE")){
 			echo "Uh-Oh\n";
@@ -52,7 +53,7 @@ class Error {
 		
 	}
 	
-	function getBacktrace($trace = null){
+	static function getBacktrace($trace = null){
 		
 		if (is_null($trace)){
 			echo "<p>(Trace generated from inside Exception handler)</p>";
@@ -110,7 +111,7 @@ class Error {
 		
 	}
 	
-	function var_dump_string($thing){
+	static function var_dump_string($thing){
 			ob_start();
 			var_dump($thing);
 			$content = ob_get_contents();

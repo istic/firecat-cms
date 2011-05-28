@@ -29,7 +29,9 @@ class HTTP_Request {
 		if(isset($_SERVER['HTTP_ACCEPT_CHARSET'])){
 			$this->accept_charset   = explode(',', $_SERVER['HTTP_ACCEPT_CHARSET']);
 		}
-		$this->keep_alive       = @$_SERVER['HTTP_KEEP_ALIVE'];
+		if(isset($_SERVER['HTTP_KEEP_ALIVE'])){
+			$this->keep_alive   = $_SERVER['HTTP_KEEP_ALIVE'];
+		}
 		$this->connection       = @$_SERVER['HTTP_CONNECTION'];
 		
 		$this->client_ip        = @$_SERVER['REMOTE_ADDR'];

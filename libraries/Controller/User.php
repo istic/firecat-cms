@@ -149,8 +149,10 @@ class Controller_User extends Controller {
 
                 $session->set("loggedin", true);
                 $session->set("user", $user);
-               
-                if($to = $session->get("afterLogin")){
+
+		$to = $session->get("afterLogin");
+		
+                if($to){
                     $this->response->redirect($to);
                     return;
                 } else {

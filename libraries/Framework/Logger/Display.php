@@ -4,7 +4,7 @@ class Logger_Display {
 	
 	// Display Plank logging info
 	
-	function display(){
+	static function display(){
 		if(!defined('SHOWDEBUG')|| !SHOWDEBUG){return;}
 		
 		$out = <<<EOW
