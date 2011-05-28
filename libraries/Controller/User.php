@@ -192,6 +192,7 @@ class Controller_User extends Controller {
         $smarty = new SmartyView();
         $smarty->assign('title', 'User Details');
         $smarty->assign('user', $user);
+        $smarty->assign('groups', $user->admingroups()->find_many());
 
         $out = $smarty->fetch('user/viewCurrent.tpl.html');
         $this->response->setcontent($out);
