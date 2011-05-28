@@ -18,6 +18,30 @@ class Controller_Admin extends Controller {
 
     }
 
+    function BecomeAction(){
+        $this->requireAdmin();
+        $session = Session::getInstance();
+	$who = $this->request->path[2];
+
+	$user = Model::Factory('Model_User')
+	    ->where("username", $who)
+	    ->find_one();
+
+
+	$session->set("loggedin", true);
+	$session->set("user", $user);
+
+	$to = $session->get("afterLogin");
+
+	if($to){
+	    $this->response->redirect($to);
+	    return;
+	} else {
+	    $this->response->redirect("/User");
+	    return;
+	}
+    }
+
     function AdminGroupsAction(){
 
         $this->requireAdmin();
